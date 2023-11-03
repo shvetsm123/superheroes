@@ -1,11 +1,17 @@
-"use strict";
-/** @type {import('sequelize-cli').Migration} */
-
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
     class Superhero extends Model {
-        static associate() {}
+        static associate({ SuperPower, Image }) {
+            Superhero.hasMany(SuperPower, {
+                foreignKey: "heroId",
+                as: "superPowers",
+            });
+            Superhero.hasMany(Image, {
+                foreignKey: "heroId",
+                as: "images",
+            });
+        }
     }
 
     Superhero.init(
