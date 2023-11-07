@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     SuperPower.init(
         {
             name: {
-                unique: true,
                 allowNull: false,
                 type: DataTypes.STRING,
                 validate: {
@@ -23,10 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: "Superpower", // не зависит от названия файла модели
+            modelName: "SuperPower",
             tableName: "super_powers",
             underscored: true,
         }
     );
+
     return SuperPower;
 };

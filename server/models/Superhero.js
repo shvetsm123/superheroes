@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
                     notEmpty: true,
                 },
             },
-            cathPhrase: {
+            catchPhrase: {
                 allowNull: false,
                 type: DataTypes.STRING,
                 validate: {
@@ -52,10 +52,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: "Superhero", // не зависит от названия файла модели
+            modelName: "Superhero",
             tableName: "superheroes",
             underscored: true,
         }
     );
+
     return Superhero;
 };
