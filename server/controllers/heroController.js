@@ -4,6 +4,7 @@ const createHttpError = require("http-errors");
 module.exports.createHero = async (req, res, next) => {
     try {
         const { body, files } = req;
+
         const hero = await Superhero.create(body);
 
         if (files?.length) {
@@ -12,18 +13,26 @@ module.exports.createHero = async (req, res, next) => {
                 heroId: hero.id,
             }));
 
-            await Image.bulkCreate(images, { returning: true });
+            await Image.bulkCreate(images, {
+                returning: true,
+            });
         }
 
         if (body?.superPowers?.length) {
-            body.superPowers.map((power) => ({ name: power, heroId: hero.id }));
+            const powers = body.superPowers.map((power) => ({
+                name: power,
+                heroId: hero.id,
+            }));
+
             await SuperPower.bulkCreate(powers, {
                 returning: true,
             });
         }
 
         const heroWithData = await Superhero.findAll({
-            where: { id: hero.id },
+            where: {
+                id: hero.id,
+            },
             include: [
                 {
                     model: SuperPower,
@@ -47,8 +56,8 @@ module.exports.createHero = async (req, res, next) => {
 module.exports.getHeroes = async (req, res, next) => {
     try {
         const { pagination } = req;
+
         const heroes = await Superhero.findAll({
-            where: { id: hero.id },
             include: [
                 {
                     model: SuperPower,
@@ -81,8 +90,7 @@ module.exports.getHeroById = async (req, res, next) => {
             params: { id },
         } = req;
 
-        const hero = await Superhero.findByPk({
-            id,
+        const hero = await Superhero.findByPk(id, {
             include: [
                 {
                     model: SuperPower,
@@ -128,11 +136,17 @@ module.exports.updateHeroById = async (req, res, next) => {
                 heroId: hero.id,
             }));
 
-            await Image.bulkCreate(images, { returning: true });
+            await Image.bulkCreate(images, {
+                returning: true,
+            });
         }
 
         if (body?.superPowers?.length) {
-            body.superPowers.map((power) => ({ name: power, heroId: hero.id }));
+            const powers = body.superPowers.map((power) => ({
+                name: power,
+                heroId: hero.id,
+            }));
+
             await SuperPower.bulkCreate(powers, {
                 returning: true,
             });
@@ -143,7 +157,9 @@ module.exports.updateHeroById = async (req, res, next) => {
         }
 
         const heroWithData = await Superhero.findAll({
-            where: { id: updatedHero.id },
+            where: {
+                id: updatedHero.id,
+            },
             include: [
                 {
                     model: SuperPower,
@@ -166,7 +182,9 @@ module.exports.updateHeroById = async (req, res, next) => {
 
 module.exports.deleteHeroById = async (req, res, next) => {
     try {
-        const { params: id } = req;
+        const {
+            params: { id },
+        } = req;
 
         const count = await Superhero.destroy({ where: { id } });
 
