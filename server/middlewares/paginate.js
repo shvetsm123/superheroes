@@ -11,6 +11,7 @@ module.exports = async (req, res, next) => {
                 !limit || limit <= 0 || limit > MAX_LIMIT ? MAX_LIMIT : limit,
             offset: !offset || offset <= 0 ? 0 : offset,
         };
+        next();
     } catch (error) {
         next(error);
     }
